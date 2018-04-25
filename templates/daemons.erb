@@ -13,50 +13,18 @@
 #
 # When activation a daemon at the first time, a config file, even if it is
 # empty, has to be present *and* be owned by the user and group "frrouting", else
-# the daemon will not be started by /etc/init.d/frrouting. The permissions should
+# the daemon will not be started by /etc/init.d/frr. The permissions should
 # be u=rw,g=r,o=.
 # When using "vtysh" such a config file is also needed. It should be owned by
-# group "frroutingvty" and set to ug=rw,o= though. Check /etc/pam.d/frrouting, too.
+# group "frrvty" and set to ug=rw,o= though. Check /etc/pam.d/frr too.
 #
 # The watchfrrouting daemon is always started. Per default in monitoring-only but
-# that can be changed via /etc/frrouting/debian.conf.
-<% if scope.lookupvar('zebra') %>
-zebra=yes
-<% else %>
-zebra=no
-<% end  %>
-<% if scope.lookupvar('bgpd') %>
-bgpd=yes
-<% else %>
-bgpd=no
-<% end  %>
-<% if scope.lookupvar('ospfd') %>
-ospfd=yes
-<% else %>
-ospfd=no
-<% end  %>
-<% if scope.lookupvar('ospf6d') %>
-ospf6d=yes
-<% else %>
-ospf6d=no
-<% end  %>
-<% if scope.lookupvar('ripd') %>
-ripd=yes
-<% else %>
-ripd=no
-<% end  %>
-<% if scope.lookupvar('ripngd') %>
-ripngd=yes
-<% else %>
-ripngd=no
-<% end  %>
-<% if scope.lookupvar('isisd') %>
-isisd=yes
-<% else %>
-isisd=no
-<% end  %>
-<% if scope.lookupvar('babeld') %>
-babeld=yes
-<% else %>
-babeld=no
-<% end  %>
+# that can be changed via /etc/frr/debian.conf.
+<% if scope.lookupvar('zebra') %>zebra=yes<% else %>zebra=no<% end  %>
+<% if scope.lookupvar('bgpd') %>bgpd=yes<% else %>bgpd=no<% end  %>
+<% if scope.lookupvar('ospfd') %>ospfd=yes<% else %>ospfd=no<% end  %>
+<% if scope.lookupvar('ospf6d') %>ospf6d=yes<% else %>ospf6d=no<% end  %>
+<% if scope.lookupvar('ripd') %>ripd=yes<% else %>ripd=no<% end  %>
+<% if scope.lookupvar('ripngd') %>ripngd=yes<% else %>ripngd=no<% end  %>
+<% if scope.lookupvar('isisd') %>isisd=yes<% else %>isisd=no<% end  %>
+<% if scope.lookupvar('babeld') %>babeld=yes<% else %>babeld=no<% end  %>
