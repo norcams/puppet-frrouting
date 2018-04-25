@@ -1,0 +1,17 @@
+hostname <%= @hostname %>
+password <%= scope.lookupvar('frrouting::params:password') %>
+log file <%= scope.lookupvar('frrouting::params::bgp_logfile') %>
+log timestamp precision 6
+!
+<% ospf_interfaces.each do |key,value| -%>
+  interface <%= value['interface'] %>
+    ip ospf area <%= value['area'] %>
+!
+<%  end -%>
+!
+router ospf
+  ospf router-id <%= scope.lookupvar('frrouting::params::router_id') %>
+  log-adjacency-changes detail
+!
+line vty
+!
