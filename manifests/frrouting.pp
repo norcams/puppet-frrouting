@@ -13,6 +13,7 @@ class frrouting::frrouting (
   $bgp_networks          = $frrouting::params::bgp_networks,
   $bgp_networks6         = $frrouting::params::bgp_networks6,
   $bgp_neighbors         = $frrouting::params::bgp_neighbors,
+  $bgp_neighbors6        = $frrouting::params::bgp_neighbors6,
   $bgp_neighbor_groups   = $frrouting::params::bgp_neighbor_groups,
   $bgp_accesslist        = $frrouting::params::bgp_accesslist,
   $bgp_ip_prefix_list    = $frrouting::params::bgp_ip_prefix_list,

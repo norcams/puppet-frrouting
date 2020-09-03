@@ -51,6 +51,7 @@ class frrouting::params {
   $bgp_neighbor_groups = undef
   #$bgp_neighbors is an array of of neighbor comands
   $bgp_neighbors = undef
+  $bgp_neighbors6 = undef
   #$bgp_accesslists is a hash of arrays with list names and rules, ie
   # frrouting::bgpd::bgp_accesslists => { '10' => [ 'permit 10.0.0.0 0.0.0.255', 'permit 192.168.0.0 0.0.255.255', ], }
   $bgp_accesslist = undef
