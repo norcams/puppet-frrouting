@@ -29,12 +29,18 @@ router bgp <%= scope.lookupvar('bgp_as') %>
 <% end %><% end %><% end %><% end %><% end -%>
 <% (1..@bgp_networks6.length).each do |i| %> network <%= @bgp_networks6[i-1] %>
 <% end -%>
-<% if @bgp_options6 -%><% (1..@bgp_options6.length).each do |i| %><%= @bgp_options6[i-1] %>
-<% end -%>
+<% if @bgp_options6 -%><% (1..@bgp_options6.length).each do |i| %> <%= @bgp_options6[i-1] %>
+<% end%><% end -%>
 <% if @bgp_neighbors6 -%><% (1..@bgp_neighbors6.length).each do |i| %> neighbor <%= @bgp_neighbors6[i-1] %>
 <% end -%>
 <% end%> exit-address-family
 !
+<% end -%>
+<% if @zebra_ip6_routes -%><% (1..@zebra_ip6_routes.length).each do |i| %> ipv6 route <%= @zebra_ip6_routes[i-1] %>
+<% end%>!
+<% end -%>
+<% if @zebra_ip_routes -%><% (1..@zebra_ip_routes.length).each do |i| %> ip route <%= @zebra_ip_routes[i-1] %>
+<% end%>!
 <% end -%>
 <% if @bgp_accesslist -%><% @bgp_accesslist.each do |name| %><% (0..name[1].length).each do |i| %><%
  if name[1][i] %> access-list <%= name[0] %> <%= name[1][i]%>
@@ -47,13 +53,15 @@ router bgp <%= scope.lookupvar('bgp_as') %>
  if name[1][i] %> ipv6 access-list <%= name[0] %> <%= name[1][i]%>
 <% end %><% end %><% end %>!
 <% end -%>
-<% if @bgp_ipv6_prefix_list -%><% (1..@bgp_ipv6_prefix_list.length).each do |i| %> ip prefix-list <%= @bgp_ipv6_prefix_list[i-1] %>
+<% if @bgp_ipv6_prefix_list -%><% (1..@bgp_ipv6_prefix_list.length).each do |i| %> ipv6 prefix-list <%= @bgp_ipv6_prefix_list[i-1] %>
 <% end%>!
 <% end -%>
 <% if @bgp_route_maps -%><% @bgp_route_maps.each do |name| %> route-map <%= name[0] %> <% (0..name[1].length).each do |i| %>
 <% if name[1][i] %>  <%= name[1][i]%><% end %><% end %>!
 <% end %><% end -%>
 <% if @bgp_generic_options -%><% @bgp_generic_options.each do |name| %> <%= name[0] %> <%= name[1] %>
+<% end %><% end -%>
+<% if @zebra_generic_options -%><% @zebra_generic_options.each do |name| %> <%= name[0] %> <%= name[1] %>
 <% end %><% end -%>
 !
 line vty
