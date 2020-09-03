@@ -29,7 +29,7 @@ router bgp <%= scope.lookupvar('bgp_as') %>
 <% end %><% end %><% end %><% end %><% end -%>
 <% (1..@bgp_networks6.length).each do |i| %> network <%= @bgp_networks6[i-1] %>
 <% if @bgp_neighbors6 -%><% (1..@bgp_neighbors6.length).each do |i| %> neighbor <%= @bgp_neighbors6[i-1] %>
-<% end%>!
+<% end%><% end -%>
 <% end%> exit-address-family
 !
 <% end -%>
