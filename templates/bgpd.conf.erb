@@ -27,9 +27,10 @@ router bgp <%= scope.lookupvar('bgp_as') %>
 <%
 (0..name[1]['members6'].length).each do |i| %><% if name[1]['members6'][i] %> neighbor <%= name[1]['members6'][i]%> peer-group <%= name[0] %>
 <% end %><% end %><% end %><% end %><% end -%>
-<% (1..@bgp_networks6.length).each do |i| %> network <%= @bgp_networks6[i-1] %><% end%>
+<% (1..@bgp_networks6.length).each do |i| %> network <%= @bgp_networks6[i-1] %>
+<% end -%>
 <% if @bgp_neighbors6 -%><% (1..@bgp_neighbors6.length).each do |i| %> neighbor <%= @bgp_neighbors6[i-1] %>
-<% end%>
+<% end -%>
 <% end%> exit-address-family
 !
 <% end -%>
