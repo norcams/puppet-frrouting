@@ -50,6 +50,13 @@ router bgp <%= scope.lookupvar('bgp_as') %>
 <% if @bgp_ip_prefix_list -%><% (1..@bgp_ip_prefix_list.length).each do |i| %> ip prefix-list <%= @bgp_ip_prefix_list[i-1] %>
 <% end%>!
 <% end -%>
+<% if @bgp_accesslist6 -%><% @bgp_accesslist6.each do |name| %><% (0..name[1].length).each do |i| %><%
+ if name[1][i] %> ipv6 access-list <%= name[0] %> <%= name[1][i]%>
+<% end %><% end %><% end %>!
+<% end -%>
+<% if @bgp_ipv6_prefix_list -%><% (1..@bgp_ipv6_prefix_list.length).each do |i| %> ip prefix-list <%= @bgp_ipv6_prefix_list[i-1] %>
+<% end%>!
+<% end -%>
 <% if @bgp_route_maps -%><% @bgp_route_maps.each do |name| %> route-map <%= name[0] %> <% (0..name[1].length).each do |i| %>
 <% if name[1][i] %>  <%= name[1][i]%><% end %><% end %>!
 <% end %><% end -%>
