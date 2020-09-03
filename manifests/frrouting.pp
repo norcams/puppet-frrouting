@@ -10,6 +10,7 @@ class frrouting::frrouting (
   $bgp_logfile           = $frrouting::params::bgp_logfile,
   $bgp_as                = $frrouting::params::bgp_as,
   $bgp_options           = $frrouting::params::bgp_options,
+  $bgp_options6          = $frrouting::params::bgp_options6,
   $bgp_networks          = $frrouting::params::bgp_networks,
   $bgp_networks6         = $frrouting::params::bgp_networks6,
   $bgp_neighbors         = $frrouting::params::bgp_neighbors,
