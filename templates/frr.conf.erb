@@ -15,16 +15,25 @@ router bgp <%= scope.lookupvar('bgp_as') %>
  if name[1]['options'][i] %> neighbor <%= name[0] %> <%= name[1]['options'][i]%>
 <% end %><% end %><% if name[1]['members'] %><%
 (0..name[1]['members'].length).each do |i| %><% if name[1]['members'][i] %> neighbor <%= name[1]['members'][i]%> peer-group <%= name[0] %>
-<% end %><% end %><% end %><% end %>!
+<% end %><% end %><% end %><% if name[1]['bgp_listen_range'] %><%
+(0..name[1]['bgp_listen_range'].length).each do |i| %><% if name[1]['bgp_listen_range'][i] %> bgp listen range <%= name[1]['bgp_listen_range'][i]%> peer-group <%= name[0] %>
+<% end %><% end %><% end %><% if name[1]['ip_access_list'] %><%
+if name[1]['ip_access_list'] %> neighbor <%= name[0] %> prefix-list <%= name[0] %>-accept in
+ neighbor <%= name[0] %> prefix-list <%= name[0] %>-deny out
+<% end %><% end %><% end %>!
 <% end -%>
 <% if @bgp_neighbors -%><% (1..@bgp_neighbors.length).each do |i| %> neighbor <%= @bgp_neighbors[i-1] %>
-<% end%>!
+<% end %>!
 <% end -%>
 <% if @bgp_networks6 -%>
  address-family ipv6 <% if @bgp_neighbor_groups -%><% @bgp_neighbor_groups.each do |name| %><% if name[1]['members6'] %>
  neighbor <%= name[0] %> activate
-<% @bgp_neighbor_groups.each do |name| %><% (0..name[1]['options6'].length).each do |i| %><%
+<% @bgp_neighbor_groups.each do |name| %><% if name[1]['options6'] %><% (0..name[1]['options6'].length).each do |i| %><%
  if name[1]['options6'][i] %> <%= name[1]['options6'][i]%>
+<% end %><% end %><% end %><% end %><%
+@bgp_neighbor_groups.each do |name| %><% if name[1]['ip_access_list6'] %><%
+if name[1]['ip_access_list6'] %> neighbor <%= name[0] %> prefix-list <%= name[0] %>6-accept in
+ neighbor <%= name[0] %> prefix-list <%= name[0] %>6-deny out
 <% end %><% end %><% end %><%
 (0..name[1]['members6'].length).each do |i| %><% if name[1]['members6'][i] %> neighbor <%= name[1]['members6'][i]%> peer-group <%= name[0] %>
 <% end %><% end %><% end %><% end %><% end -%>
@@ -46,7 +55,13 @@ router bgp <%= scope.lookupvar('bgp_as') %>
 <% if @bgp_accesslist -%><% @bgp_accesslist.each do |name| %><% (0..name[1].length).each do |i| %><%
  if name[1][i] %> access-list <%= name[0] %> <%= name[1][i]%>
 <% end %><% end %><% end %>!
+<% end -%><% if @bgp_neighbor_groups -%><% @bgp_neighbor_groups.each do |name| %><% if name[1]['ip_access_list'] %><% (0..name[1]['ip_access_list'].length).each do |i| %><% if name[1]['ip_access_list'][i] %> ip prefix-list <%= name[0] %>-accept seq <%= 10+i %> permit <%= name[1]['ip_access_list'][i] %>
+<% end %><% end %><% end -%>
+<% if name[1]['ip_access_list'] %> ip prefix-list <%= name[0] %>-accept seq 50 deny any
 <% end -%>
+<% if name[1]['ip_access_list'] %> ip prefix-list <%= name[0] %>-deny seq 10 deny any
+<% end -%>
+<% end %><% end -%>
 <% if @bgp_ip_prefix_list -%><% (1..@bgp_ip_prefix_list.length).each do |i| %> ip prefix-list <%= @bgp_ip_prefix_list[i-1] %>
 <% end%>!
 <% end -%>
@@ -56,7 +71,13 @@ router bgp <%= scope.lookupvar('bgp_as') %>
 <% end -%>
 <% if @bgp_ipv6_prefix_list -%><% (1..@bgp_ipv6_prefix_list.length).each do |i| %> ipv6 prefix-list <%= @bgp_ipv6_prefix_list[i-1] %>
 <% end%>!
+<% end -%><% if @bgp_neighbor_groups -%><% @bgp_neighbor_groups.each do |name| %><% if name[1]['ip_access_list6'] %><% (0..name[1]['ip_access_list6'].length).each do |i| %><% if name[1]['ip_access_list6'][i] %> ipv6 prefix-list <%= name[0] %>6-accept seq <%= 10+i %> permit <%= name[1]['ip_access_list6'][i] %>
+<% end %><% end %><% end -%>
+<% if name[1]['ip_access_list6'] %> ipv6 prefix-list <%= name[0] %>6-accept seq 50 deny any
 <% end -%>
+<% if name[1]['ip_access_list6'] %> ipv6 prefix-list <%= name[0] %>6-deny seq 10 deny any
+<% end -%>
+<% end %><% end %>!
 <% if @bgp_route_maps -%><% @bgp_route_maps.each do |name| %> route-map <%= name[0] %> <% (0..name[1].length).each do |i| %>
 <% if name[1][i] %>  <%= name[1][i]%><% end %><% end %>!
 <% end %><% end -%>
