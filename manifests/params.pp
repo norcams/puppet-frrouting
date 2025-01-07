@@ -45,6 +45,7 @@ class frrouting::params {
   #$bgp_options is an array of bgp options, ie
   # frrouting::bgpd::bgp_options => [ 'log-neighbor-changes', 'router-id 192.168.0.1', ],
   $bgp_options = undef
+  $bgp_options4 = undef
   $bgp_options6 = undef
   #$bgp_neighbor_group is a hash of arrays with group names and options, ie
   # frrouting::bgpd::bgp_neighbor_groups => { 'name-of-group': options => [ 'peer-group', 'remote-as 65535', ], members => [ '192.168.0.10', '192.168.0.11', ], }
@@ -66,7 +67,9 @@ class frrouting::params {
   $bgp_route_maps = undef
   #$bgp_generic_options is a hash of generic options for bgpd
   $bgp_generic_options = undef
-  
+  #$bgp_vrf_options is a hash containg settings for each vrf with 'address_family4_unicast', 'address_family6_unicast' and 'options'
+  $bgp_vrf_options = undef
+
   #OSPF variables
   $ospf_logfile = '/var/log/frr/ospfd.log'
   #$ospf_interfaces is an array in the format 

@@ -5,6 +5,10 @@ username cumulus nopassword
 <% if name[1][i] %>  <%= name[1][i]%><% end %><% end %>!
 <% end %><% end -%>
 router bgp <%= scope.lookupvar('bgp_as') %>
+<% if @bgp_options4 -%> address-family ipv4 unicast<% (1..@bgp_options4.length).each do |i| %>
+  <%= @bgp_options4[i-1] %><% end %>
+ exit-address-family
+<% end -%>
 <% if @bgp_options -%><% (1..@bgp_options.length).each do |i| %> <%= @bgp_options[i-1] %>
 <% end%>!
 <% end -%>
@@ -46,6 +50,18 @@ if name[1]['ip_access_list6'] %> neighbor <%= name[0] %> prefix-list <%= name[0]
 <% end%> exit-address-family
 !
 <% end -%>
+<% if @bgp_vrf_options -%><% @bgp_vrf_options.each do |name| %>router bgp <%= scope.lookupvar('bgp_as') %> vrf <%= name[0] %>
+<% if name[1]['address_family4_unicast'] %> address-family ipv4 unicast
+<% (1..name[1]['address_family4_unicast'].length).each do |i| %>  <%= name[1]['address_family4_unicast'][i-1] %>
+<% end -%>
+ exit-address-family<% end %>
+<% if name[1]['address_family6_unicast'] %> address-family ipv6 unicast
+<% (1..name[1]['address_family6_unicast'].length).each do |i| %>  <%= name[1]['address_family6_unicast'][i-1] %>
+<% end -%>
+ exit-address-family
+<% end -%><% if name[1]['options'] %><% (1..name[1]['options'].length).each do |i| %> <%= name[1]['options'][i-1] %>
+<% end %><% end %>!
+<% end -%><% end -%>
 <% if @zebra_ip6_routes -%><% (1..@zebra_ip6_routes.length).each do |i| %> ipv6 route <%= @zebra_ip6_routes[i-1] %>
 <% end%>!
 <% end -%>
