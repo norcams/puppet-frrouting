@@ -99,8 +99,8 @@ if name[1]['ip_access_list6'] %> neighbor <%= name[0] %> prefix-list <%= name[0]
 <% if @bgp_route_maps -%><% @bgp_route_maps.each do |name| %> route-map <%= name[0] %> <% (0..name[1].length).each do |i| %>
 <% if name[1][i] %>  <%= name[1][i]%><% end %><% end %>!
 <% end %><% end -%>
-<% if @bgp_generic_options -%><% @bgp_generic_options.each do |name| %> <%= name[0] %> <%= name[1] %>
-<% end %><% end -%>
+<% if @bgp_generic_options -%> <% (1..@bgp_generic_options.length).each do |i| %>
+ <%= @bgp_generic_options[i-1] %><% end -%><% end %>
 <% if @zebra_generic_options -%><% @zebra_generic_options.each do |name| %> <%= name[0] %> <%= name[1] %>
 <% end %><% end -%>
 !

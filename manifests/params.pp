@@ -65,7 +65,7 @@ class frrouting::params {
   #$bgp_route_maps is a hash of arrays with route-maps with options, ie
   # frrouting::bgpd::bgp_route_maps => { 'ADVERTS permit 5' => [ 'match ip address prefix-list routes-from-external ', ' set as-path prepend 123 123', ], }
   $bgp_route_maps = undef
-  #$bgp_generic_options is a hash of generic options for bgpd
+  #$bgp_generic_options is an array of generic options for bgpd
   $bgp_generic_options = undef
   #$bgp_vrf_options is a hash containg settings for each vrf with 'address_family4_unicast', 'address_family6_unicast' and 'options'
   $bgp_vrf_options = undef
