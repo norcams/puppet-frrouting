@@ -7,14 +7,22 @@ class frrouting::params {
   # Cumulus Linux defaults to use a single config file, frrouting.conf
   $single_config_file = false
   # running zebra is highly recommended
-  $zebra  = true
-  $bgpd   = false
-  $ospfd  = false
-  $ospf6d = false
-  $ripd   = false
-  $ripngd = false
-  $isisd  = false
-  $babeld = false
+  $zebra   = true
+  $bgpd    = false
+  $ospfd   = false
+  $ospf6d  = false
+  $ripd    = false
+  $ripngd  = false
+  $isisd   = false
+  $babeld  = false # single file ffr.conf only
+  $fabricd = false # single file ffr.conf only
+  $pimd    = false # single file ffr.conf only
+  $ldpd    = false # single file ffr.conf only
+  $nhrpd   = false # single file ffr.conf only
+  $eigrpd  = false # single file ffr.conf only
+  $sharpd  = false # single file ffr.conf only
+  $pbrd    = false # single file ffr.conf only
+
   #do not publish password in public repositories
   $password = 'pass123'
   $router_id = $::network_lo
