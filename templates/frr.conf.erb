@@ -40,7 +40,7 @@ if name[1]['ip_access_list6'] %> neighbor <%= name[0] %> prefix-list <%= name[0]
  neighbor <%= name[0] %> prefix-list <%= name[0] %>6-deny out
 <% end %><% end %><% end %><%
 (0..name[1]['members6'].length).each do |i| %><% if name[1]['members6'][i] %> neighbor <%= name[1]['members6'][i]%> peer-group <%= name[0] %>
-<% end %><% end %><% end %><% end %><% end -%>
+<% end %><% end %><% end %><% end %><% end %>
 <% (1..@bgp_networks6.length).each do |i| %> network <%= @bgp_networks6[i-1] %>
 <% end -%>
 <% if @bgp_options6 -%><% (1..@bgp_options6.length).each do |i| %> <%= @bgp_options6[i-1] %>
