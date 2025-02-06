@@ -22,6 +22,14 @@ class frrouting (
   $ripngd             = $frrouting::params::ripngd,
   $isisd              = $frrouting::params::isisd,
   $babeld             = $frrouting::params::babeld,
+  $fabricd            = $frrouting::params::fabricd,
+  $pimd               = $frrouting::params::pimd,
+  $ldpd               = $frrouting::params::ldpd,
+  $nhrpd              = $frrouting::params::nhrpd,
+  $eigrpd             = $frrouting::params::eigrpd,
+  $sharpd             = $frrouting::params::sharpd,
+  $pbrd               = $frrouting::params::pbrd,
+
 ) inherits frrouting::params {
   if $manage_package {
     package { 'frr':
