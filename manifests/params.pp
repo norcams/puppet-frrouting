@@ -6,6 +6,10 @@ class frrouting::params {
   $manage_service = true
   # Cumulus Linux defaults to use a single config file, frrouting.conf
   $single_config_file = false
+  $sonic_container = false
+  $config_dir   = '/etc/frr'
+  $config_owner = 'frr'
+  $config_grp   = 'frr'
   # running zebra is highly recommended
   $zebra   = true
   $bgpd    = false

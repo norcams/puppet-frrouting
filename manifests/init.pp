@@ -14,6 +14,10 @@ class frrouting (
   $manage_package     = $frrouting::params::manage_package,
   $manage_service     = $frrouting::params::manage_service,
   $single_config_file = $frrouting::params::single_config_file,
+  $sonic_container    = $frrouting::params::sonic_container,
+  $config_dir         = $frrouting::params::config_dir,
+  $config_owner       = $frrouting::params::config_owner,
+  $config_grp         = $frrouting::params::config_grp,
   $zebra              = $frrouting::params::zebra,
   $bgpd               = $frrouting::params::bgpd,
   $ospfd              = $frrouting::params::ospfd,
@@ -38,7 +42,7 @@ class frrouting (
     }
   }
 
-  if $manage_service {
+  if $manage_service and ! $sonic_container {
     service { 'frr':
       ensure      => running,
       hasrestart  => true,
@@ -46,20 +50,43 @@ class frrouting (
       enable      => true,
     }
 
-    file { '/etc/frr/daemons':
+    file { "${config_dir}/daemons":
       mode    => '0644',
-      owner   => 'frr',
-      group   => 'frr',
+      owner   => $config_owner,
+      group   => $config_grp,
       content => template('frrouting/daemons.erb'),
       notify  => Service['frr'],
     }
 
-    file { '/etc/frr/vtysh.conf':
+    file { "${config_dir}/vtysh.conf":
       mode    => '0644',
-      owner   => 'frr',
-      group   => 'frr',
+      owner   => $config_owner,
+      group   => $config_grp,
       content => template('frrouting/vtysh.conf.erb'),
       notify  => Service['frr'],
+    }
+  }
+
+  if $manage_service and $sonic_container {
+    file { "${config_dir}/daemons":
+      mode    => '0644',
+      owner   => $config_owner,
+      group   => $config_grp,
+      content => template('frrouting/daemons.erb'),
+      notify  => [Exec['sonic_container_frr_reload']],
+    }
+
+    file { "${config_dir}/vtysh.conf":
+      mode    => '0644',
+      owner   => $config_owner,
+      group   => $config_grp,
+      content => template('frrouting/vtysh.conf.erb'),
+      notify  => [Exec['sonic_container_frr_reload']],
+    }
+
+    exec { 'sonic_container_frr_reload':
+      command     => '/usr/bin/docker exec bgp sh -c "/usr/lib/frr/frr-reload"',
+      refreshonly => true,
     }
   }
 

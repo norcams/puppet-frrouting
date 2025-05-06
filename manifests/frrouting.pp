@@ -5,6 +5,10 @@
 # Supports zebra/bgpd for now
 
 class frrouting::frrouting (
+  $config_dir            = $frrouting::config_dir,
+  $config_owner          = $frrouting::config_owner,
+  $config_grp            = $frrouting::config_grp,
+  $sonic_container       = $frrouting::sonic_container,
   $bgp_hostname          = $frrouting::params::bgp_hostname,
   $bgp_password          = $frrouting::params::bgp_password,
   $bgp_logfile           = $frrouting::params::bgp_logfile,
@@ -33,11 +37,26 @@ class frrouting::frrouting (
   $zebra_generic_options = $frrouting::params::zebra_generic_options,
 ) {
 
-  file { '/etc/frr/frr.conf':
-    mode    => '0644',
-    owner   => 'frr',
-    group   => 'frr',
-    content => template('frrouting/frr.conf.erb'),
-    notify  => Service['frr'],
+  if $sonic_container {
+    file { "${config_dir}/frr.conf":
+      mode    => '0644',
+      owner   => $config_owner,
+      group   => $config_grp,
+      content => template('frrouting/frr.conf.erb'),
+      notify  => [Exec['sonic_container_frrconf_reload']],
+      }
+    } else {
+    file { "${config_dir}/frr.conf":
+      mode    => '0644',
+      owner   => $config_owner,
+      group   => $config_grp,
+      content => template('frrouting/frr.conf.erb'),
+      notify  => Service['frr'],
+      }
+    }
+
+  exec { 'sonic_container_frrconfig_reload':
+    command     => '/usr/bin/docker exec bgp sh -c "/usr/lib/frr/frr-reload"',
+    refreshonly => true,
   }
 }
