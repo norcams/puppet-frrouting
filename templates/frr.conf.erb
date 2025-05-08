@@ -5,7 +5,7 @@ username cumulus nopassword
 <% if @zebra_interfaces -%><% @zebra_interfaces.each do |name| %> interface <%= name[0] %> <% (0..name[1].length).each do |i| %>
 <% if name[1][i] %>  <%= name[1][i]%><% end %><% end %>!
 <% end %><% end -%>
-router bgp <%= scope.lookupvar('bgp_as') %>
+<% if @bgp_in_default_vrf %>router bgp <%= scope.lookupvar('bgp_as') %><% end -%>
 <% if @bgp_options4 -%> address-family ipv4 unicast<% (1..@bgp_options4.length).each do |i| %>
   <%= @bgp_options4[i-1] %><% end %>
  exit-address-family

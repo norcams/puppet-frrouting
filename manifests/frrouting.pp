@@ -11,6 +11,7 @@ class frrouting::frrouting (
   $sonic_container       = $frrouting::sonic_container,
   $frr_defaults          = undef,
   $bgp_hostname          = $frrouting::params::bgp_hostname,
+  $bgp_in_default_vrf    = true,
   $bgp_password          = $frrouting::params::bgp_password,
   $bgp_logfile           = $frrouting::params::bgp_logfile,
   $bgp_as                = $frrouting::params::bgp_as,
