@@ -58,6 +58,10 @@ if name[1]['ip_access_list6'] %> neighbor <%= name[0] %> prefix-list <%= name[0]
 <% (1..name[1]['address_family4_unicast'].length).each do |i| %>  <%= name[1]['address_family4_unicast'][i-1] %>
 <% end -%>
  exit-address-family<% end %>
+<% if name[1]['address_family_l2vpn'] %> address-family l2vpn evpn
+<% (1..name[1]['address_family_l2vpn'].length).each do |i| %>  <%= name[1]['address_family_l2vpn'][i-1] %>
+<% end -%>
+ exit-address-family<% end %>
 <% if name[1]['address_family6_unicast'] %> address-family ipv6 unicast
 <% (1..name[1]['address_family6_unicast'].length).each do |i| %>  <%= name[1]['address_family6_unicast'][i-1] %>
 <% end -%>

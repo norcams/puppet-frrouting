@@ -79,7 +79,7 @@ class frrouting::params {
   $bgp_route_maps = undef
   #$bgp_generic_options is an array of generic options for bgpd
   $bgp_generic_options = undef
-  #$bgp_vrf_options is a hash containg settings for each vrf with 'address_family4_unicast', 'address_family6_unicast' and 'options'
+  #$bgp_vrf_options is a hash containg settings for each vrf with 'address_family4_unicast', 'address_family6_unicast', address_family_l2vpn', and 'options'
   $bgp_vrf_options = undef
 
   #OSPF variables
