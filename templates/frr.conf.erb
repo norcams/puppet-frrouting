@@ -1,6 +1,7 @@
 log timestamp precision 6
 username cumulus nopassword
 !
+<% if @frr_defaults -%>frr defaults <%= @frr_defaults %><% end %>
 <% if @zebra_interfaces -%><% @zebra_interfaces.each do |name| %> interface <%= name[0] %> <% (0..name[1].length).each do |i| %>
 <% if name[1][i] %>  <%= name[1][i]%><% end %><% end %>!
 <% end %><% end -%>

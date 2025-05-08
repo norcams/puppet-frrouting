@@ -9,6 +9,7 @@ class frrouting::frrouting (
   $config_owner          = $frrouting::config_owner,
   $config_grp            = $frrouting::config_grp,
   $sonic_container       = $frrouting::sonic_container,
+  $frr_defaults          = undef,
   $bgp_hostname          = $frrouting::params::bgp_hostname,
   $bgp_password          = $frrouting::params::bgp_password,
   $bgp_logfile           = $frrouting::params::bgp_logfile,
