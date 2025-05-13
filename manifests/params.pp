@@ -45,6 +45,9 @@ class frrouting::params {
   # frrouting::zebra::zebra_generic_options => { 'ip' => 'forwarding', 'ipv6' => 'forwarding' }
   $zebra_generic_options = undef
 
+  # vrf params is an array of generic options for vrf configuration
+  $vrf_params = undef
+
   #BGP variables
   $bgp_hostname = 'bgpd'
   $bgp_password = 'cn321'

@@ -37,6 +37,7 @@ class frrouting::frrouting (
   $zebra_ip_routes       = $frrouting::params::zebra_ip_routes,
   $zebra_interfaces      = $frrouting::params::zebra_interfaces,
   $zebra_generic_options = $frrouting::params::zebra_generic_options,
+  $vrf_params            = $frrouting::params::vrf_params,
 ) {
 
   if $sonic_container {
