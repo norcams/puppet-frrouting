@@ -76,16 +76,8 @@ class frrouting (
       notify  => [Exec['sonic_container_frr_reload']],
     }
 
-    file { "${config_dir}/vtysh.conf":
-      mode    => '0644',
-      owner   => $config_owner,
-      group   => $config_grp,
-      content => template('frrouting/vtysh.conf.erb'),
-      notify  => [Exec['sonic_container_frr_reload']],
-    }
-
     exec { 'sonic_container_frr_reload':
-      command     => '/usr/bin/docker exec bgp sh -c "/usr/lib/frr/frr-reload"',
+      command     => '/usr/bin/docker exec bgp sh -c "/usr/bin/python /usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf"',
       refreshonly => true,
     }
   }

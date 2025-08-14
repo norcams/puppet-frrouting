@@ -59,7 +59,7 @@ class frrouting::frrouting (
     }
 
   exec { 'sonic_container_frrconf_reload':
-    command     => '/usr/bin/docker exec bgp sh -c "/usr/lib/frr/frr-reload"',
+    command     => '/usr/bin/docker exec bgp sh -c "/usr/bin/python /usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf"',
     refreshonly => true,
   }
 }
