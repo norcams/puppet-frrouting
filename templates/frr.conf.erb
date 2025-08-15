@@ -52,7 +52,7 @@ if name[1]['ip_access_list6'] %> neighbor <%= name[0] %> prefix-list <%= name[0]
 <% end%> exit-address-family
 !
 <% end -%>
-<% if @bgp_vrf_options -%><% @bgp_vrf_options.each do |name| %>router bgp <% if name[1].key?('bgp_as') %><%= name[1]['bgp_as'] %><% else %><%= scope.lookupvar('bgp_as') %><% end -%> vrf <%= name[0] %>
+<% if @bgp_vrf_options -%><% @bgp_vrf_options.each do |name| %>router bgp <% if name[1].key?('bgp_as') %><%= name[1]['bgp_as'] %><% else %><%= scope.lookupvar('bgp_as') %><% end -%><% if name[0] != "default" %> vrf <%= name[0] %><% end %>
 <% if name[1]['common_cfg'] %><% (1..name[1]['common_cfg'].length).each do |i| %> <%= name[1]['common_cfg'][i-1] %>
 <% end -%><% end -%>
 <% if name[1]['address_family4_unicast'] %> address-family ipv4 unicast
