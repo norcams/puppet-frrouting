@@ -26,6 +26,7 @@ class frrouting::params {
   $eigrpd  = false # single file ffr.conf only
   $sharpd  = false # single file ffr.conf only
   $pbrd    = false # single file ffr.conf only
+  $bfdd    = false # single file ffr.conf only
 
   #do not publish password in public repositories
   $password = 'pass123'

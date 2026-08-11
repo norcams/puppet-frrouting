@@ -33,6 +33,7 @@ class frrouting (
   $eigrpd             = $frrouting::params::eigrpd,
   $sharpd             = $frrouting::params::sharpd,
   $pbrd               = $frrouting::params::pbrd,
+  $bfdd               = $frrouting::params::bfdd,
 
 ) inherits frrouting::params {
   if $manage_package {
