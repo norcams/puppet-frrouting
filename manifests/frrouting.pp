@@ -10,6 +10,7 @@ class frrouting::frrouting (
   $config_grp            = $frrouting::config_grp,
   $sonic_container       = $frrouting::sonic_container,
   $frr_defaults          = undef,
+  $frr_template          = 'frrouting/frr.conf.erb',
   $bgp_hostname          = $frrouting::params::bgp_hostname,
   $bgp_in_default_vrf    = true,
   $bgp_password          = $frrouting::params::bgp_password,
@@ -53,7 +54,7 @@ class frrouting::frrouting (
       mode    => '0644',
       owner   => $config_owner,
       group   => $config_grp,
-      content => template('frrouting/frr.conf.erb'),
+      content => template($frr_template),
       notify  => Service['frr'],
       }
     }
