@@ -1,8 +1,9 @@
 log timestamp precision 6
 username cumulus nopassword
 !
-<% if @frr_defaults -%>frr defaults <%= @frr_defaults %><% end -%>
+<% if @frr_defaults -%>frr defaults <%= @frr_defaults %>
 !
+<%- end %>
 <% if @zebra_interfaces -%>
 <% @zebra_interfaces.each do |iface| -%>
 interface <%= iface[0] %>
@@ -13,188 +14,12 @@ interface <%= iface[0] %>
 !
 <% end -%>
 <% end -%>
-!
-<% if @bgp_in_default_vrf -%>router bgp <%= scope.lookupvar('bgp_as') %>
-<% end -%>
-<% if @bgp_options4 -%>
-address-family ipv4 unicast
-<% @bgp_options4.each do |opt| -%>
-  <%= opt %>
-<% end -%>
-exit-address-family
-!
-<% end -%>
-<% if @bgp_options -%>
-<% @bgp_options.each do |opt| -%>
-<%= opt %>
-<% end -%>
-!
-<% end -%>
-<% if @bgp_networks  && @bgp_in_default_vrf -%>
-<% @bgp_networks.each do |net| -%>
-network <%= net %>
-<% end -%>
-!
-<% end -%>
-!
-<% if @bgp_neighbor_groups && @bgp_in_default_vrf -%>
-<% @bgp_neighbor_groups.each do |group| -%>
-<% if (!group[1].key?('vrf') || group[1]['vrf'] == 'default') -%>
-<% (group[1]['options'] || []).each do |opt| -%>
-neighbor <%= group[0] %> <%= opt %>
-<% end -%>
-<% (group[1]['members'] || []).each do |member| -%>
-neighbor <%= member %> peer-group <%= group[0] %>
-<% end -%>
-<% (group[1]['bgp_listen_range'] || []).each do |range| -%>
-bgp listen range <%= range %> peer-group <%= group[0] %>
-<% end -%>
-<% if group[1]['ip_access_list'] -%>
-neighbor <%= group[0] %> prefix-list <%= group[0] %>-accept in
-neighbor <%= group[0] %> prefix-list <%= group[0] %>-deny out
-<% end -%>
-<% end -%>
-<% end -%>
-!
-<% end -%>
-<% if @bgp_neighbors -%>
-<% @bgp_neighbors.each do |nb| -%>
-neighbor <%= nb %>
-<% end -%>
-!
-<% end -%>
-!
-<% if @bgp_networks6 && @bgp_in_default_vrf -%>
-address-family ipv6 unicast
-<% if @bgp_neighbor_groups -%>
-<% @bgp_neighbor_groups.each do |group| -%>
-<% if (!group[1].key?('vrf') || group[1]['vrf'] == 'default') -%>
-<% if group[1]['members6'] -%>
-neighbor <%= group[0] %> activate
-<% end -%>
-<% (group[1]['options6'] || []).each do |opt| -%>
-  <%= opt %>
-<% end -%>
-<% if group[1]['ip_access_list6'] -%>
-neighbor <%= group[0] %> prefix-list <%= group[0] %>6-accept in
-neighbor <%= group[0] %> prefix-list <%= group[0] %>6-deny out
-<% end -%>
-<% (group[1]['members6'] || []).each do |member| -%>
-neighbor <%= member %> peer-group <%= group[0] %>
-<% end -%>
-<% end -%>
-<% end -%>
-<% end -%>
-<% @bgp_networks6.each do |net| -%>
-network <%= net %>
-<% end -%>
-<% if @bgp_options6 -%>
-<% @bgp_options6.each do |opt| -%>
-<%= opt %>
-<% end -%>
-<% end -%>
-<% if @bgp_neighbors6 -%>
-<% @bgp_neighbors6.each do |nb| -%>
-neighbor <%= nb %>
-<% end -%>
-<% end -%>
-exit-address-family
-!
-<% end -%>
-!
-<% if @bgp_vrf_options -%>
-<% @bgp_vrf_options.each do |vrf| -%>
-router bgp <% if vrf[1]['bgp_as'] %><%= vrf[1]['bgp_as'] %><% else %><%= scope.lookupvar('bgp_as') %><% end %><% if vrf[0] != 'default' %> vrf <%= vrf[0] %><% end %>
-<% if vrf[1]['common_cfg'] -%>
-<% (vrf[1]['common_cfg'] || []).each do |cfg| -%>
-<%= cfg %>
-<% end -%>
-<% end -%>
-<% if @bgp_neighbor_groups -%>
-<% @bgp_neighbor_groups.each do |group| -%>
-<% if group[1]['vrf'] == vrf[0] -%>
-<% (group[1]['options'] || []).each do |opt| -%>
-neighbor <%= group[0] %> <%= opt %>
-<% end -%>
-<% (group[1]['members'] || []).each do |member| -%>
-neighbor <%= member %> peer-group <%= group[0] %>
-<% end -%>
-<% (group[1]['members6'] || []).each do |member| -%>
-neighbor <%= member %> peer-group <%= group[0] %>
-<% end -%>
-<% (group[1]['bgp_listen_range'] || []).each do |range| -%>
-bgp listen range <%= range %> peer-group <%= group[0] %>
-<% end -%>
-<% if group[1]['ip_access_list'] -%>
-neighbor <%= group[0] %> prefix-list <%= group[0] %>-accept in
-neighbor <%= group[0] %> prefix-list <%= group[0] %>-deny out
-<% end -%>
-<% end -%>
-<% end -%>
-<% end -%>
-<% if vrf[1]['address_family4_unicast'] -%>
-address-family ipv4 unicast
-<% (vrf[1]['address_family4_unicast'] || []).each do |af| -%>
-  <%= af %>
-<% end -%>
-exit-address-family
-<% end -%>
-<% if vrf[1]['address_family_l2vpn'] -%>
-address-family l2vpn evpn
-<% (vrf[1]['address_family_l2vpn'] || []).each do |af| -%>
-  <%= af %>
-<% end -%>
-exit-address-family
-<% end -%>
-<% if vrf[1]['address_family6_unicast'] -%>
-address-family ipv6 unicast
-<% (vrf[1]['address_family6_unicast'] || []).each do |af| -%>
-  <%= af %>
-<% end -%>
-<% if @bgp_neighbor_groups -%>
-<% @bgp_neighbor_groups.each do |group| -%>
-<% if group[1]['vrf'] == vrf[0] -%>
-<% (group[1]['options6'] || []).each do |opt| -%>
-  <%= opt %>
-<% end -%>
-<% if group[1]['ip_access_list6'] -%>
-  neighbor <%= group[0] %> prefix-list <%= group[0] %>6-accept in
-  neighbor <%= group[0] %> prefix-list <%= group[0] %>6-deny out
-<% end -%>
-<% end -%>
-<% end -%>
-<% end -%>
-exit-address-family
-<% end -%>
-<% if vrf[1]['options'] -%>
-<% (vrf[1]['options'] || []).each do |opt| -%>
-<%= opt %>
-<% end -%>
-<% end -%>
-!
-<% end -%>
-<% end -%>
-!
-<% if @zebra_ip6_routes -%>
-<% @zebra_ip6_routes.each do |route| -%>
-ipv6 route <%= route %>
-<% end -%>
-!
-<% end -%>
-<% if @zebra_ip_routes -%>
-<% @zebra_ip_routes.each do |route| -%>
-ip route <%= route %>
-<% end -%>
-!
-<% end -%>
-!
 <% if @bgp_accesslist -%>
 <% @bgp_accesslist.each do |acl| -%>
 <% (acl[1] || []).each do |rule| -%>
 <% if rule -%>access-list <%= acl[0] %> <%= rule %><% end %>
 <% end -%>
 <% end -%>
-!
 <% end -%>
 !
 <% if @bgp_neighbor_groups -%>
@@ -239,9 +64,9 @@ ipv6 prefix-list <%= group[0] %>6-deny seq 10 deny any
 <% end -%>
 !
 <% if @bgp_ipv6_prefix_list -%>
-<% @bgp_ipv6_prefix_list.each do |plist| %>
-ipv6 prefix-list <%= plist -%>
-<% end %>
+<% @bgp_ipv6_prefix_list.each do |plist| -%>
+ipv6 prefix-list <%= plist %>
+<% end -%>
 <% end -%>
 !
 <% if @bgp_route_maps -%>
@@ -252,6 +77,175 @@ route-map <%= rmap[0] %>
 <% end -%>
 !
 <% end -%><% end -%>
+<% if @bgp_in_default_vrf -%>router bgp <%= scope.lookupvar('bgp_as') %>
+<% end -%>
+<% if @bgp_options4 -%>
+address-family ipv4 unicast
+<% @bgp_options4.each do |opt| -%>
+  <%= opt %>
+<% end -%>
+exit-address-family
+!
+<% end -%>
+<% if @bgp_options -%>
+<% @bgp_options.each do |opt| -%>
+<%= opt %>
+<% end -%>
+<% end -%>
+<% if @bgp_networks  && @bgp_in_default_vrf -%>
+<% @bgp_networks.each do |net| -%>
+network <%= net %>
+<% end -%>
+<% end -%>
+<% if @bgp_neighbor_groups && @bgp_in_default_vrf -%>
+<% @bgp_neighbor_groups.each do |group| -%>
+<% if (!group[1].key?('vrf') || group[1]['vrf'] == 'default') -%>
+<% (group[1]['options'] || []).each do |opt| -%>
+neighbor <%= group[0] %> <%= opt %>
+<% end -%>
+<% (group[1]['members'] || []).each do |member| -%>
+neighbor <%= member %> peer-group <%= group[0] %>
+<% end -%>
+<% (group[1]['bgp_listen_range'] || []).each do |range| -%>
+bgp listen range <%= range %> peer-group <%= group[0] %>
+<% end -%>
+<% if group[1]['ip_access_list'] -%>
+neighbor <%= group[0] %> prefix-list <%= group[0] %>-accept in
+neighbor <%= group[0] %> prefix-list <%= group[0] %>-deny out
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% if @bgp_neighbors -%>
+<% @bgp_neighbors.each do |nb| -%>
+neighbor <%= nb %>
+<% end -%>
+<% end -%>
+<% if @bgp_networks6 && @bgp_in_default_vrf -%>
+address-family ipv6 unicast
+<% if @bgp_neighbor_groups -%>
+<% @bgp_neighbor_groups.each do |group| -%>
+<% if (!group[1].key?('vrf') || group[1]['vrf'] == 'default') -%>
+<% if group[1]['members6'] -%>
+neighbor <%= group[0] %> activate
+<% end -%>
+<% (group[1]['options6'] || []).each do |opt| -%>
+  <%= opt %>
+<% end -%>
+<% if group[1]['ip_access_list6'] -%>
+neighbor <%= group[0] %> prefix-list <%= group[0] %>6-accept in
+neighbor <%= group[0] %> prefix-list <%= group[0] %>6-deny out
+<% end -%>
+<% (group[1]['members6'] || []).each do |member| -%>
+neighbor <%= member %> peer-group <%= group[0] %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% @bgp_networks6.each do |net| -%>
+network <%= net %>
+<% end -%>
+<% if @bgp_options6 -%>
+<% @bgp_options6.each do |opt| -%>
+<%= opt %>
+<% end -%>
+<% end -%>
+<% if @bgp_neighbors6 -%>
+<% @bgp_neighbors6.each do |nb| -%>
+neighbor <%= nb %>
+<% end -%>
+<% end -%>
+exit-address-family
+!
+<% end -%>
+<% if @bgp_vrf_options -%>
+<% @bgp_vrf_options.each do |vrf| -%>
+router bgp <% if vrf[1]['bgp_as'] %><%= vrf[1]['bgp_as'] %><% else %><%= scope.lookupvar('bgp_as') %><% end %><% if vrf[0] != 'default' %> vrf <%= vrf[0] %><% end %>
+<% if vrf[1]['common_cfg'] -%>
+<% (vrf[1]['common_cfg'] || []).each do |cfg| -%>
+  <%= cfg %>
+<% end -%>
+<% end -%>
+<% if @bgp_neighbor_groups -%>
+<% @bgp_neighbor_groups.each do |group| -%>
+<% if group[1]['vrf'] == vrf[0] -%>
+<% (group[1]['options'] || []).each do |opt| -%>
+  neighbor <%= group[0] %> <%= opt %>
+<% end -%>
+<% (group[1]['members'] || []).each do |member| -%>
+  neighbor <%= member %> peer-group <%= group[0] %>
+<% end -%>
+<% (group[1]['members6'] || []).each do |member| -%>
+  neighbor <%= member %> peer-group <%= group[0] %>
+<% end -%>
+<% (group[1]['bgp_listen_range'] || []).each do |range| -%>
+  bgp listen range <%= range %> peer-group <%= group[0] %>
+<% end -%>
+<% if group[1]['ip_access_list'] -%>
+  neighbor <%= group[0] %> prefix-list <%= group[0] %>-accept in
+  neighbor <%= group[0] %> prefix-list <%= group[0] %>-deny out
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% if vrf[1]['address_family4_unicast'] -%>
+  !
+  address-family ipv4 unicast
+<% (vrf[1]['address_family4_unicast'] || []).each do |af| -%>
+    <%= af %>
+<% end -%>
+  exit-address-family
+  !
+<% end -%>
+<% if vrf[1]['address_family_l2vpn'] -%>
+  address-family l2vpn evpn
+<% (vrf[1]['address_family_l2vpn'] || []).each do |af| -%>
+    <%= af %>
+<% end -%>
+  exit-address-family
+  !
+<% end -%>
+<% if vrf[1]['address_family6_unicast'] -%>
+  address-family ipv6 unicast
+<% (vrf[1]['address_family6_unicast'] || []).each do |af| -%>
+    <%= af %>
+<% end -%>
+<% if @bgp_neighbor_groups -%>
+<% @bgp_neighbor_groups.each do |group| -%>
+<% if group[1]['vrf'] == vrf[0] -%>
+<% (group[1]['options6'] || []).each do |opt| -%>
+    <%= opt %>
+<% end -%>
+<% if group[1]['ip_access_list6'] -%>
+    neighbor <%= group[0] %> prefix-list <%= group[0] %>6-accept in
+    neighbor <%= group[0] %> prefix-list <%= group[0] %>6-deny out
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+  exit-address-family
+  !
+<% end -%>
+<% if vrf[1]['options'] -%>
+<% (vrf[1]['options'] || []).each do |opt| -%>
+<%= opt %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+!
+<% if @zebra_ip6_routes -%>
+<% @zebra_ip6_routes.each do |route| -%>
+ipv6 route <%= route %>
+<% end -%>
+!
+<% end -%>
+<% if @zebra_ip_routes -%>
+<% @zebra_ip_routes.each do |route| -%>
+ip route <%= route %>
+<% end -%>
+<% end -%>
+!
 <% if @pbr_maps -%>
 <% @pbr_maps.each do |pbr| -%>
 pbr-map <%= pbr[0] %>
@@ -261,13 +255,13 @@ pbr-map <%= pbr[0] %>
 !
 <% end -%><% end -%>
 <% if @bgp_generic_options -%>
-<% @bgp_generic_options.each do |opt| %>
+<% @bgp_generic_options.each do |opt| -%>
 <%= opt %>
 <% end -%>
 <% end -%>
 !
 <% if @zebra_generic_options -%>
-<% @zebra_generic_options.each do |opt| %>
+<% @zebra_generic_options.each do |opt| -%>
 <%= opt[0] %> <%= opt[1] %>
 <% end -%>
 !

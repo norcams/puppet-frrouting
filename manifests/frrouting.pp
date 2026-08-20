@@ -8,6 +8,7 @@ class frrouting::frrouting (
   $config_dir            = $frrouting::config_dir,
   $config_owner          = $frrouting::config_owner,
   $config_grp            = $frrouting::config_grp,
+  $manage_service        = $frrouting::manage_service,
   $sonic_container       = $frrouting::sonic_container,
   $frr_defaults          = undef,
   $frr_template          = 'frrouting/frr.conf.erb',
@@ -51,17 +52,23 @@ class frrouting::frrouting (
       owner   => $config_owner,
       group   => $config_grp,
       content => template('frrouting/frr.conf.erb'),
-      notify  => [Exec['sonic_container_frrconf_reload']],
-      }
-    } else {
-    file { "${config_dir}/frr.conf":
-      mode    => '0644',
-      owner   => $config_owner,
-      group   => $config_grp,
-      content => template($frr_template),
-      notify  => Service['frr'],
-      }
+      notify    => $manage_service ? {
+        true    => [Exec['sonic_container_frrconf_reload']],
+        default => undef,
+      },
     }
+  } else {
+    file { "${config_dir}/frr.conf":
+      mode      => '0644',
+      owner     => $config_owner,
+      group     => $config_grp,
+      content   => template($frr_template),
+      notify    => $manage_service ? {
+        true    => Service['frr'],
+        default => undef,
+      },
+    }
+  }
 
   exec { 'sonic_container_frrconf_reload':
     command     => '/usr/bin/docker exec bgp sh -c "/usr/bin/python /usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf"',
