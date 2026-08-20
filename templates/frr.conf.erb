@@ -30,7 +30,7 @@ exit-address-family
 <% end -%>
 !
 <% end -%>
-<% if @bgp_networks -%>
+<% if @bgp_networks  && @bgp_in_default_vrf -%>
 <% @bgp_networks.each do |net| -%>
 network <%= net %>
 <% end -%>
@@ -64,7 +64,7 @@ neighbor <%= nb %>
 !
 <% end -%>
 !
-<% if @bgp_networks6 -%>
+<% if @bgp_networks6 && @bgp_in_default_vrf -%>
 address-family ipv6 unicast
 <% if @bgp_neighbor_groups -%>
 <% @bgp_neighbor_groups.each do |group| -%>
@@ -214,7 +214,6 @@ ip prefix-list <%= group[0] %>-deny seq 10 deny any
 <% @bgp_ip_prefix_list.each do |plist| -%>
 ip prefix-list <%= plist %>
 <% end -%>
-!
 <% end -%>
 !
 <% if @bgp_accesslist6 -%>
@@ -224,7 +223,6 @@ ip prefix-list <%= plist %>
 <% end -%>
 <% end -%>
 <% end -%>
-!
 <% end -%>
 !
 <% if @bgp_neighbor_groups -%>
@@ -278,7 +276,8 @@ pbr-map <%= pbr[0] %>
 <% @vrf_params.each do |vrf| -%>
 vrf <%= vrf[0] %>
 <% (vrf[1] || []).each do |cfg| -%>
-<% if cfg -%>  <%= cfg %><% end -%>
+<% if cfg -%>  <%= cfg %>
+<% end -%>
 <% end -%>
 exit-vrf
 !

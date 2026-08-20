@@ -49,6 +49,7 @@ class frrouting (
       hasrestart  => true,
       hasstatus   => true,
       enable      => true,
+      restart     => '/usr/bin/systemctl reload frr',
     }
 
     file { "${config_dir}/daemons":

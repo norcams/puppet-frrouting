@@ -41,6 +41,10 @@ class frrouting::frrouting (
   $vrf_params            = $frrouting::params::vrf_params,
 ) {
 
+  if $bgp_in_default_vrf == true and $bgp_vrf_options.has_key('default') {
+    fail('If you define routing in default VRF in bgp_vrf_options, you must set bgp_in_default_vrf to false. Will not configure FRR due to invalid configuration')
+  }
+
   if $sonic_container {
     file { "${config_dir}/frr.conf":
       mode    => '0644',
