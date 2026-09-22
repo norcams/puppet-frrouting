@@ -158,9 +158,18 @@ neighbor <%= nb %>
 exit-address-family
 !
 <% end -%>
+<% if @vrf_params -%>
+<% @vrf_params.each do |vrf| -%>
+vrf <%= vrf[0] %>
+<% (vrf[1] || []).each do |cfg| -%>
+<% if cfg -%>  <%= cfg %>
+<% end -%>
+<% end -%>
+exit-vrf
+!
 <% if @bgp_vrf_options -%>
 <% @bgp_vrf_options.each do |vrf| -%>
-router bgp <% if vrf[1]['bgp_as'] %><%= vrf[1]['bgp_as'] %><% else %><%= scope.lookupvar('bgp_as') %><% end %><% if vrf[0] != 'default' %> vrf <%= vrf[0] %><% end %>
+router bgp <% if vrf[1]['bgp_as'] %><%= vrf[1]['bgp_as'] %><% else %><%= scope.lookupvar('final_as') %><% end %><% if vrf[0] != 'default' %> vrf <%= vrf[0] %><% end %>
 <% if vrf[1]['common_cfg'] -%>
 <% (vrf[1]['common_cfg'] || []).each do |cfg| -%>
   <%= cfg %>
@@ -171,6 +180,10 @@ router bgp <% if vrf[1]['bgp_as'] %><%= vrf[1]['bgp_as'] %><% else %><%= scope.l
 <% if group[1]['vrf'] == vrf[0] -%>
 <% (group[1]['options'] || []).each do |opt| -%>
   neighbor <%= group[0] %> <%= opt %>
+<% end -%>
+<% (group[1]['auto_ll_members'] || []).each do |member| -%>
+  neighbor <%= member[0] %> interface peer-group <%= group[0] %>
+  neighbor <%= member[0] %> capability link-local
 <% end -%>
 <% (group[1]['members'] || []).each do |member| -%>
   neighbor <%= member %> peer-group <%= group[0] %>
@@ -193,6 +206,15 @@ router bgp <% if vrf[1]['bgp_as'] %><%= vrf[1]['bgp_as'] %><% else %><%= scope.l
   address-family ipv4 unicast
 <% (vrf[1]['address_family4_unicast'] || []).each do |af| -%>
     <%= af %>
+<% end -%>
+<% if @bgp_neighbor_groups -%>
+<% @bgp_neighbor_groups.each do |group| -%>
+<% if group[1]['vrf'] == vrf[0] -%>
+<% (group[1]['options4'] || []).each do |opt| -%>
+    <%= opt %>
+<% end -%>
+<% end -%>
+<% end -%>
 <% end -%>
   exit-address-family
   !
@@ -266,16 +288,19 @@ pbr-map <%= pbr[0] %>
 <% end -%>
 !
 <% end -%>
-<% if @vrf_params -%>
-<% @vrf_params.each do |vrf| -%>
-vrf <%= vrf[0] %>
-<% (vrf[1] || []).each do |cfg| -%>
-<% if cfg -%>  <%= cfg %>
 <% end -%>
 <% end -%>
-exit-vrf
-!
+<% if @bfd_profiles -%>
+bfd
+<% @bfd_profiles.each do |profile_name, settings| -%>
+ profile <%= profile_name %>
+<% settings.each do |opt| -%>
+  <%= opt %>
 <% end -%>
+ exit
+ !
+<% end -%>
+exit
 <% end -%>
 !
 line vty

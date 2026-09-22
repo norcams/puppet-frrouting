@@ -85,6 +85,7 @@ class frrouting::params {
   $bgp_generic_options = undef
   #$bgp_vrf_options is a hash containg settings for each vrf with 'address_family4_unicast', 'address_family6_unicast', address_family_l2vpn', and 'options'
   $bgp_vrf_options = undef
+  $bfd_profiles = undef
 
   #OSPF variables
   $ospf_logfile = '/var/log/frr/ospfd.log'

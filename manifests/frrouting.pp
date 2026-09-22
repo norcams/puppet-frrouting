@@ -17,6 +17,7 @@ class frrouting::frrouting (
   $bgp_password          = $frrouting::params::bgp_password,
   $bgp_logfile           = $frrouting::params::bgp_logfile,
   $bgp_as                = $frrouting::params::bgp_as,
+  $bgp_autoas            = undef,
   $bgp_options           = $frrouting::params::bgp_options,
   $bgp_options4          = $frrouting::params::bgp_options4,
   $bgp_options6          = $frrouting::params::bgp_options6,
@@ -32,6 +33,7 @@ class frrouting::frrouting (
   $bgp_route_maps        = $frrouting::params::bgp_route_maps,
   $bgp_generic_options   = $frrouting::params::bgp_generic_options,
   $bgp_vrf_options       = $frrouting::params::bgp_vrf_options,
+  $bfd_profiles          = $frrouting::params::bfd_profiles,
   $zebra_password        = $frrouting::params::zebra_password,
   $zebra_enable_password = $frrouting::params::zebra_enable_password,
   $zebra_log_file        = $frrouting::params::zebra_log_file,
@@ -44,6 +46,12 @@ class frrouting::frrouting (
 
   if $bgp_in_default_vrf == true and $bgp_vrf_options.has_key('default') {
     fail('If you define routing in default VRF in bgp_vrf_options, you must set bgp_in_default_vrf to false. Will not configure FRR due to invalid configuration')
+  }
+
+  if $bgp_autoas {
+    $final_as = "${autoas_prefix}${regsubst($::hostid, /^(.{2})$/, '0\1')}"
+  } else {
+    $final_as = $bgp_as
   }
 
   if $sonic_container {
