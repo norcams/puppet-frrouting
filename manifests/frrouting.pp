@@ -18,6 +18,7 @@ class frrouting::frrouting (
   $bgp_logfile           = $frrouting::params::bgp_logfile,
   $bgp_as                = $frrouting::params::bgp_as,
   $bgp_autoas            = undef,
+  $autoas_prefix         = undef,
   $bgp_options           = $frrouting::params::bgp_options,
   $bgp_options4          = $frrouting::params::bgp_options4,
   $bgp_options6          = $frrouting::params::bgp_options6,
