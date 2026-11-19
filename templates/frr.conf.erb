@@ -92,7 +92,7 @@ exit-address-family
 <%= opt %>
 <% end -%>
 <% end -%>
-<% if @bgp_networks  && @bgp_in_default_vrf -%>
+<% if @bgp_networks && @bgp_in_default_vrf -%>
 <% @bgp_networks.each do |net| -%>
 network <%= net %>
 <% end -%>
@@ -167,6 +167,8 @@ vrf <%= vrf[0] %>
 <% end -%>
 exit-vrf
 !
+<% end -%>
+<% end -%>
 <% if @bgp_vrf_options -%>
 <% @bgp_vrf_options.each do |vrf| -%>
 router bgp <% if vrf[1]['bgp_as'] %><%= vrf[1]['bgp_as'] %><% else %><%= scope.lookupvar('final_as') %><% end %><% if vrf[0] != 'default' %> vrf <%= vrf[0] %><% end %>
@@ -266,8 +268,8 @@ ipv6 route <%= route %>
 <% @zebra_ip_routes.each do |route| -%>
 ip route <%= route %>
 <% end -%>
-<% end -%>
 !
+<% end -%>
 <% if @pbr_maps -%>
 <% @pbr_maps.each do |pbr| -%>
 pbr-map <%= pbr[0] %>
@@ -288,8 +290,6 @@ pbr-map <%= pbr[0] %>
 <% end -%>
 !
 <% end -%>
-<% end -%>
-<% end -%>
 <% if @bfd_profiles -%>
 bfd
 <% @bfd_profiles.each do |profile_name, settings| -%>
@@ -297,8 +297,8 @@ bfd
 <% settings.each do |opt| -%>
   <%= opt %>
 <% end -%>
- exit
- !
+exit
+!
 <% end -%>
 exit
 <% end -%>
