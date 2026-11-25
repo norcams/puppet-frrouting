@@ -29,7 +29,7 @@ interface <%= iface[0] %>
 <% if net -%>ip prefix-list <%= group[0] %>-accept seq <%= 10 + i*10 %> permit <%= net %>
 <% end -%>
 <% end -%>
-ip prefix-list <%= group[0] %>-accept seq 50 deny any
+ip prefix-list <%= group[0] %>-accept seq 1250 deny any
 ip prefix-list <%= group[0] %>-deny seq 10 deny any
 <% end -%>
 <% end -%>
@@ -57,7 +57,7 @@ ip prefix-list <%= plist %>
 <% if net -%>ipv6 prefix-list <%= group[0] %>6-accept seq <%= 10 + i*10 %> permit <%= net %>
 <% end -%>
 <% end -%>
-ipv6 prefix-list <%= group[0] %>6-accept seq 50 deny any
+ipv6 prefix-list <%= group[0] %>6-accept seq 1250 deny any
 ipv6 prefix-list <%= group[0] %>6-deny seq 10 deny any
 <% end -%>
 <% end -%>
